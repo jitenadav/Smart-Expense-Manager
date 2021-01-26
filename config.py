@@ -10,3 +10,6 @@ MYSQL_HOST = 'localhost'
 MYSQL_USER = 'root'
 MYSQL_PASSWORD = 'root@123'
 MYSQL_DB = 'SEMDB'
+
+#SQLAlchemy CONFIGS
+SQLALCHEMY_DATABASE_URI = 'mysql://root:root@123@localhost/SEMDB'

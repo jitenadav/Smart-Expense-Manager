@@ -1,9 +1,22 @@
-from flask import Flask, render_template, request, flash
+from flask import Flask, render_template, request, flash, redirect, session, url_for
 from flask_mysqldb import MySQL
+from flask_sqlalchemy import SQLAlchemy
+import bcrypt
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 app.config.from_pyfile('config.py')
-mysql = MySQL(app)
+# mysql = MySQL(app)
+db = SQLAlchemy(app)
+
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(50), unique=True, nullable=False)
+    password = db.Column(db.String(100), nullable=False)
+    mobno = db.Column(db.Unicode(255), nullable=False)
+
 
 @app.route('/',methods=['GET','POST'])
 @app.route('/login', methods =['GET', 'POST'])
@@ -26,28 +39,27 @@ def home():
 @app.route('/signup', methods=['GET', 'POST'])
 def registration():
     if request.method == 'POST':
-        cursor = mysql.connection.cursor()
-        existing_user = users.find_one({'uname':request.form['signupusername']})
-        existing_email = users.find_one({'email':request.form['signupemail']})
 
-        if (existing_user is None) and (existing_email is None):
-            hashpass = bcrypt.hashpw(request.form['signuppassword'].encode('utf-8'),bcrypt.gensalt())
-            users.insert({'uname': request.form['signupusername'],'email': request.form['signupemail'],
-                            'contact': request.form['signupphone'], 'password' : hashpass,'utype':"u"})
-            # session['username'] = request.form['signupusername']
+        name = request.form['name']
+        email = request.form['email']
+        mobno = request.form['mobilenumber']
+        pswd = request.form['password']
+        confpswd = request.form['repeatpassword']
+
+        existing_email = User.query.filter_by(email=email).first()
+
+
+        if(existing_email is None):
+            hashpass = bcrypt.hashpw(pswd.encode('utf-8'),bcrypt.gensalt())
+            new_user = User(name=name, email=email, mobno=mobno, password=hashpass)
+            db.session.add(new_user)
+            db.session.commit()
+
             flash("Successfully Signed up")
             return redirect(url_for('home'))
-
-        elif (existing_email is None) and (existing_user is not None):
-            flash("That Username Already Exists!")
-            return redirect(url_for('Signup'))
-
-        elif (existing_user is None) and (existing_email is not None) :
+        elif(existing_email is not None) :
             flash('Email is Already Taken')
-            return redirect(url_for('Signup'))
-
-        flash('User Already Exists')
-        return redirect(url_for('Signup'))
+            return redirect(url_for('registration'))
 
     return render_template('registration.html')
 
