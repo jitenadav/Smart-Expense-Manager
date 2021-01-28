@@ -19,11 +19,16 @@
 				<div class="panel-heading">Log in</div>
 				<div class="panel-body">
 					<p style="font-size:16px; color:red" align="center">
-				{% with messages = get_flashed_messages() %}
+				{% with messages = get_flashed_messages(with_categories=true) %}
          	{% if messages %}
-               {% for message in messages %}
-                    <p>{{ message }}</p>
-               {% endfor %}
+					{% for category, message in messages %}
+							 <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+									 <span>{{ message }}</span>
+									 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+									 <span aria-hidden="true">&times;</span>
+									 </button>
+							 </div>
+					 {% endfor %}
          {% endif %}
       {% endwith %}
 				</p>
