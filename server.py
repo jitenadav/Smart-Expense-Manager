@@ -61,6 +61,17 @@ def registration():
             flash('Email is Already Taken')
             return redirect(url_for('registration'))
 
+
+@app.route('/changepassword',methods=['GET'.'POST'])
+def resetpassword():
+    if request.method =='POST':
+
+        name
+
+
+
+
+
     return render_template('registration.html')
 
 
