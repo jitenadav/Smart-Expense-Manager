@@ -55,13 +55,18 @@ def registration():
             db.session.add(new_user)
             db.session.commit()
 
-            flash("Successfully Signed up")
+            flash("Successfully Signed up","success")
             return redirect(url_for('home'))
         elif(existing_email is not None) :
-            flash('Email is Already Taken')
+            flash('Email is Already Taken',"error")
             return redirect(url_for('registration'))
 
     return render_template('registration.html')
+
+
+@app.route('/resetpassword')
+def resetpassword():
+    render_template('resetpassword.html')
 
 
 if __name__ == '__main__':

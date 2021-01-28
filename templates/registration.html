@@ -31,12 +31,20 @@
 			<div class="login-panel panel panel-default">
 				<div class="panel-heading">Sign Up</div>
 				<div class="panel-body">
+					{% with messages = get_flashed_messages(with_categories=true) %}
+						{% if messages %}
+						{% for category, message in messages %}
+								 <div class="alert alert-success alert-dismissible fade show" role="alert">
+											{{ message }}
+										 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+										 <span aria-hidden="true">&times;</span>
+										 </button>
+								 </div>
+						 {% endfor %}
+					 {% endif %}
+				{% endwith %}
 					<form role="form" action="" method="post" id="" name="signup" onsubmit="return checkpass();">
-						<p style="font-size:16px; color:red" align="center">
-							<?php if($msg){
-    						echo $msg;
-				  		}  ?>
-</p>
+
 						<fieldset>
 							<div class="form-group">
 								<input class="form-control" placeholder="Full Name" name="name" type="text" required="true">
