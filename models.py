@@ -1,4 +1,4 @@
-from app import db
+from server import db
 
 
 class User(db.Model):
@@ -13,3 +13,10 @@ class User(db.Model):
 class expenses(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     UserId = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+<<<<<<< HEAD
+    expDate = db.Column(db.Datetime, nullable = False)
+    expCategory = db.Column(db.String(50), nullable = False)
+    expAmount = db.Column(db.Integer, nullable = False)
+    expDesc = db.Column(db.String(100), nullable = False)
+=======
+>>>>>>> a50dc099ec6bc49a38a6bd29b48d3780d096cc30

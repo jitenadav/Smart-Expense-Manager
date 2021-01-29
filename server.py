@@ -17,6 +17,14 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     mobno = db.Column(db.Unicode(255), nullable=False)
 
+class expenses(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    UserId = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    expDate = db.Column(db.Date, nullable = False)
+    expCategory = db.Column(db.String(50), nullable = False)
+    expAmount = db.Column(db.Integer, nullable = False)
+    expDesc = db.Column(db.String(100), nullable = False)
+
 
 @app.route('/',methods=['GET','POST'])
 @app.route('/login', methods =['GET', 'POST'])
@@ -76,6 +84,21 @@ def resetpassword():
 
 @app.route('/add-expense',methods= ['POST','GET'])
 def add_expense():
+    if request.method == 'POST':
+
+        # userId =  # TODO: Add from Flask Login
+        userId = 1
+        ExpenseDate = request.form['dateexpense']
+        ExpenseCategory = request.form['category']
+        ExpenseAmount = request.form['amount']
+        ExpenseDesc = request.form['note']
+
+        new_expense = expenses(UserId = userId, expDate= ExpenseDate , expCategory = ExpenseCategory, expAmount = ExpenseAmount, expDesc= ExpenseDesc)
+        db.session.add(new_expense)
+        db.session.commit()
+        flash('Transaction Added Successfully')
+        return redirect(url_for('add_expense'))
+
     return render_template('add-expense.html')
 
 @app.route('/expense-datewise-reports',methods=['POSt,'GET'])
@@ -113,4 +136,4 @@ def manageexpense():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
