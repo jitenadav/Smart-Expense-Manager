@@ -17,6 +17,14 @@ class User(db.Model):
     password = db.Column(db.String(100), nullable=False)
     mobno = db.Column(db.Unicode(255), nullable=False)
 
+class expenses(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    UserId = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    expDate = db.Column(db.DateTime, nullable = False)
+    expCategory = db.Column(db.String(50), nullable = False)
+    expAmount = db.Column(db.Integer, nullable = False)
+    expDesc = db.Column(db.String(100), nullable = False)
+
 
 @app.route('/',methods=['GET','POST'])
 @app.route('/login', methods =['GET', 'POST'])
