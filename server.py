@@ -60,24 +60,12 @@ def registration():
         elif(existing_email is not None) :
             flash('Email is Already Taken',"error")
             return redirect(url_for('registration'))
-    return render_template('registration')
-
-
-<<<<<<< HEAD
-# @app.route('/changepassword',methods=['GET'.'POST'])
-# def resetpassword():
-#     if request.method =='POST':
+    return render_template('registration.html')
 
 
 
-
-
-
-
-=======
 @app.route('/changepassword',methods=['GET','POST'])
 def changepassword():
->>>>>>> 98c52243be74c3c75305f72ce06a901ac615b8ca
     return render_template('registration.html')
 
 
