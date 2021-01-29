@@ -78,9 +78,38 @@ def resetpassword():
 def add_expense():
     return render_template('add-expense.html')
 
-@app.route('/expense-datewise-reports',methods=['GET','POST'])
+@app.route('/expense-datewise-reports',methods=['POSt,'GET'])
 def expensedatewisereports():
     return render_template('expense-datewise-reports.html')
+
+@app.route('/expense-datewise-reports-detailed',methods=['POST','GET'])
+def expensedatewisereportsdetailed():
+    return render_template('expense-datewise-reports-detailed.html')
+
+@app.route('/expense-monthwise-reports',methods=['POST','GET'])
+def expensemonthwisereports():
+    return render_template('expense-monthwise-reports.html')
+
+@app.route('/expense-reports')
+def expensereports():
+    return render_template('expense-reports.html')
+
+@app.route('/expense-reports-detailed')
+def expensedatewisereportsdetailed():
+    return render_template('expense-report-sdetailed.html')
+
+@app.route('/exepnse-yearwise-reports')
+def expenseyearwisereports():
+    return render_template('expense-yearwise-reports.html')
+
+@app.route('/expense-yearwise-reports-detailed')
+def expenseyearwisereportsdetailed():
+    return render_template('expense-yearwise-reports-detailed.html')
+
+@app.route('/manage-expense')
+def manageexpense():
+    return render_template('manage-expense.html')
+
 
 
 if __name__ == '__main__':
