@@ -78,6 +78,10 @@ def resetpassword():
 def add_expense():
     return render_template('add-expense.html')
 
+@app.route('/expense-datewise-reports',methods=['GET','POST'])
+def expensedatewisereports():
+    return render_template('expense-datewise-reports.html')
+
 
 if __name__ == '__main__':
     app.run()
