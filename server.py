@@ -64,9 +64,9 @@ def registration():
     return render_template('registration.html')
 
 
-@app.route('/resetpassword')
+@app.route('/resetpassword', methods= ['POST','GET'])
 def resetpassword():
-    render_template('resetpassword.html')
+    return render_template('resetpassword.html')
 
 
 if __name__ == '__main__':
