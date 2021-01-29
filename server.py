@@ -62,9 +62,9 @@ def registration():
             return redirect(url_for('registration'))
 
 
-@app.route('/changepassword',methods=['GET'.'POST'])
-def resetpassword():
-    if request.method =='POST':
+# @app.route('/changepassword',methods=['GET'.'POST'])
+# def resetpassword():
+#     if request.method =='POST':
 
 
 
