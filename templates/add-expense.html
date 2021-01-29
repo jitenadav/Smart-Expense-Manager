@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Daily Expense Tracker || Add Expense</title>
+	<link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
+	<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
+	<link href="{{ url_for('static', filename='css/datepicker3.css') }}" rel="stylesheet">
+	<link href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet">
+
+	<!--Custom Font-->
+	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+	<!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+	<script>
+			let today = new Date().toISOString().substr(0, 10);
+			document.querySelector("#today").value = today;
+
+			document.querySelector("#today2").valueAsDate = new Date();
+	</script>
+</head>
+<body>
+	<?php include_once('includes/header.php');?>
+	<?php include_once('includes/sidebar.php');?>
+
+	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
+		<div class="row">
+			<ol class="breadcrumb">
+				<li><a href="#">
+					<em class="fa fa-home"></em>
+				</a></li>
+				<li class="active">Expense</li>
+			</ol>
+		</div><!--/.row-->
+
+
+
+
+		<div class="row">
+			<div class="col-lg-12">
+
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading">Expense</div>
+					<div class="panel-body">
+						<p style="font-size:16px; color:red" align="center"> <?php if($msg){
+    echo $msg;
+  }  ?> </p>
+						<div class="col-md-12">
+
+							<form role="form" method="post" action="">
+								<div class="form-group">
+									<label>Date of Expense</label>
+									<input id="today2" class="form-control" type="date" value="" name="dateexpense" required="true">
+								</div>
+
+								<div class="form-group">
+									<label>Note</label>
+									<input class="form-control" type="text" value="" required="true" name="note" placeholder="Where did you spend?">
+								</div>
+
+								<div class="form-group">
+									<label>Category</label>
+									<br>
+									
+									<span class="custom-dropdown big">
+									    <select>
+									        <option>Sherlock Holmes</option>
+									        <option>The Great Gatsby</option>
+									        <option>V for Vendetta</option>
+									        <option>The Wolf of Wallstreet</option>
+									        <option>Quantum of Solace</option>
+									    </select>
+									</span>
+								</div>
+
+								<div class="form-group">
+									<label>Amount</label>
+									<input class="form-control" type="number" value="" required="true" name="amout" placeholder="Enter Amount">
+								</div>
+
+								<div class="form-group has-success">
+									<button type="submit" class="btn btn-primary" name="submit">Add</button>
+								</div>
+
+
+								</div>
+
+							</form>
+						</div>
+					</div>
+				</div><!-- /.panel-->
+			</div><!-- /.col-->
+			<?php include_once('includes/footer.php');?>
+		</div><!-- /.row -->
+	</div><!--/.main-->
+
+<script src="{{ url_for('static',filename='js/jquery-1.11.1.min.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/bootstrap.min.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/chart.min.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/chart-data.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/easypiechart.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/easypiechart-data.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/bootstrap-datepicker.js')}}"></script>
+	<script src="{{ url_for('static',filename='js/custom.js')}}"></script>
+
+</body>
+</html>
+<?php }  ?>
