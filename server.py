@@ -101,7 +101,7 @@ def add_expense():
 
     return render_template('add-expense.html')
 
-@app.route('/expense-datewise-reports',methods=['POSt,'GET'])
+@app.route('/expense-datewise-reports',methods=['POST','GET'])
 def expensedatewisereports():
     return render_template('expense-datewise-reports.html')
 
@@ -118,15 +118,15 @@ def expensereports():
     return render_template('expense-reports.html')
 
 @app.route('/expense-reports-detailed')
-def expensedatewisereportsdetailed():
-    return render_template('expense-report-sdetailed.html')
+def edrd():
+    return render_template('expense-reports-detailed.html')
 
 @app.route('/exepnse-yearwise-reports')
 def expenseyearwisereports():
     return render_template('expense-yearwise-reports.html')
 
 @app.route('/expense-yearwise-reports-detailed')
-def expenseyearwisereportsdetailed():
+def eywd():
     return render_template('expense-yearwise-reports-detailed.html')
 
 @app.route('/manage-expense')
