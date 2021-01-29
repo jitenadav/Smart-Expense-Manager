@@ -63,22 +63,11 @@ def registration():
     return render_template('registration')
 
 
-<<<<<<< HEAD
-# @app.route('/changepassword',methods=['GET'.'POST'])
-# def resetpassword():
-#     if request.method =='POST':
 
-
-
-
-
-
-
-=======
-@app.route('/changepassword',methods=['GET','POST'])
-def changepassword():
->>>>>>> 98c52243be74c3c75305f72ce06a901ac615b8ca
-    return render_template('registration.html')
+# @app.route('/changepassword',methods=['GET','POST'])
+# def changepassword():
+# >>>>>>> 98c52243be74c3c75305f72ce06a901ac615b8ca
+#     return render_template('registration.html')
 
 
 @app.route('/resetpassword', methods= ['POST','GET'])
