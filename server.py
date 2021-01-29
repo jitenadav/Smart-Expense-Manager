@@ -60,14 +60,13 @@ def registration():
         elif(existing_email is not None) :
             flash('Email is Already Taken',"error")
             return redirect(url_for('registration'))
-    return render_template('registration')
+    return render_template('registration.html')
 
 
 
-# @app.route('/changepassword',methods=['GET','POST'])
-# def changepassword():
-# >>>>>>> 98c52243be74c3c75305f72ce06a901ac615b8ca
-#     return render_template('registration.html')
+@app.route('/changepassword',methods=['GET','POST'])
+def changepassword():
+    return render_template('registration.html')
 
 
 @app.route('/resetpassword', methods= ['POST','GET'])
@@ -78,6 +77,10 @@ def resetpassword():
 @app.route('/add-expense',methods= ['POST','GET'])
 def add_expense():
     return render_template('add-expense.html')
+
+@app.route('/expense-datewise-reports',methods=['GET','POST'])
+def expensedatewisereports():
+    return render_template('expense-datewise-reports.html')
 
 
 if __name__ == '__main__':
