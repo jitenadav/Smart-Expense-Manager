@@ -66,7 +66,7 @@ def registration():
 def resetpassword():
     if request.method =='POST':
 
-        name
+
 
 
 
