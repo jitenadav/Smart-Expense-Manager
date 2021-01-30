@@ -25,6 +25,29 @@ h2 {
 h3, h4 {
   font-weight: 300; }
 
+
+  .notify {
+    padding: 20px;
+    background-color: green;
+    color: white;
+  }
+
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .closebtn:hover {
+    color: black;
+  }
+
+
 .large {
   font-size: 2em; }
 
@@ -1025,7 +1048,7 @@ h1.page-header {
 
 .fixed-table-pagination .pagination-detail {
   margin-top: 20px; }
-  
+
 p.back-link {
   text-align: center;
   margin-bottom: 20px;
