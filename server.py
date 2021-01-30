@@ -1,81 +1,26 @@
 from flask import Flask, render_template, request, flash, redirect, session, url_for, Blueprint
 from flask_mysqldb import MySQL
 from flask_sqlalchemy import SQLAlchemy
-import bcrypt
-from werkzeug.utils import secure_filename
+from flask_login import login_required, current_user
+from .models import User, expenses
+from . import db
 
 server = Blueprint('server',__name__)
-app = Flask(__name__)
-app.config.from_pyfile('config.py')
-# mysql = MySQL(app)
-db = SQLAlchemy(app)
 
 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100), nullable=False)
-    email = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
-    mobno = db.Column(db.Unicode(255), nullable=False)
+@server.route('/dashboard',methods=['GET','POST'])
+@login_required
+def dashboard():
+    return render_template('dashboard.html',name = current_user.name)
 
 
-# @server.route('/',methods=['GET','POST'])
-# @server.route('/login', methods =['GET', 'POST'])
-# def home():
-#
-# #LOGIN
-#     msg = ""
-#     if request.method == 'POST' and 'email' in request.form and 'password' in request.form:
-#         details = request.form
-#         email = details['email']
-#         password = details['password']
-#         cur = mysql.connection.cursor()
-#         cur.execute("INSERT INTO demo(email, password) VALUES (%s, %s)", (email, password))
-#         mysql.connection.commit()
-#         cur.close()
-#         flash("User Added")
-#     return render_template('index.html', msg=msg )
-
-
-@server.route('/signup', methods=['GET', 'POST'])
-def registration():
-    if request.method == 'POST':
-
-        name = request.form['name']
-        email = request.form['email']
-        mobno = request.form['mobilenumber']
-        pswd = request.form['password']
-        confpswd = request.form['repeatpassword']
-
-        existing_email = User.query.filter_by(email=email).first()
-
-
-        if(existing_email is None):
-            hashpass = bcrypt.hashpw(pswd.encode('utf-8'),bcrypt.gensalt())
-            new_user = User(name=name, email=email, mobno=mobno, password=hashpass)
-            db.session.add(new_user)
-            db.session.commit()
-
-            flash("Successfully Signed up","success")
-            return redirect(url_for('home'))
-        elif(existing_email is not None) :
-            flash('Email is Already Taken',"error")
-            return redirect(url_for('registration'))
-    return render_template('registration.html')
-
-
-
-@app.route('/changepassword',methods=['GET','POST'])
-def changepassword():
-    return render_template('registration.html')
-
-
-@app.route('/resetpassword', methods= ['POST','GET'])
+@server.route('/resetpassword', methods= ['POST','GET'])
 def resetpassword():
     return render_template('reset_password.html')
 
 
-@app.route('/add-expense',methods= ['POST','GET'])
+@server.route('/add-expense',methods= ['POST','GET'])
+@login_required
 def add_expense():
     if request.method == 'POST':
 
@@ -90,42 +35,41 @@ def add_expense():
         db.session.add(new_expense)
         db.session.commit()
         flash('Transaction Added Successfully')
-        return redirect(url_for('add_expense'))
+        return redirect(url_for('server.add_expense'))
 
     return render_template('add-expense.html')
 
-@app.route('/expense-datewise-reports',methods=['POST','GET'])
-def expensedatewisereports():
-    return render_template('expense-datewise-reports.html')
-
-@app.route('/expense-datewise-reports-detailed',methods=['POST','GET'])
-def expensedatewisereportsdetailed():
-    return render_template('expense-datewise-reports-detailed.html')
-
-@app.route('/expense-monthwise-reports',methods=['POST','GET'])
-def expensemonthwisereports():
-    return render_template('expense-monthwise-reports.html')
-
-@app.route('/expense-reports')
-def expensereports():
-    return render_template('expense-reports.html')
-
-@app.route('/expense-reports-detailed')
-def edrd():
-    return render_template('expense-reports-detailed.html')
-
-@app.route('/exepnse-yearwise-reports')
-def expenseyearwisereports():
-    return render_template('expense-yearwise-reports.html')
-
-@app.route('/expense-yearwise-reports-detailed')
-def eywd():
-    return render_template('expense-yearwise-reports-detailed.html')
-
-@app.route('/manage-expense')
-def manageexpense():
-    return render_template('manage-expense.html')
-
+# @server.route('/expense-datewise-reports',methods=['POST','GET'])
+# def expensedatewisereports():
+#     return render_template('expense-datewise-reports.html')
+#
+# @server.route('/expense-datewise-reports-detailed',methods=['POST','GET'])
+# def expensedatewisereportsdetailed():
+#     return render_template('expense-datewise-reports-detailed.html')
+#
+# @server.route('/expense-monthwise-reports',methods=['POST','GET'])
+# def expensemonthwisereports():
+#     return render_template('expense-monthwise-reports.html')
+#
+# @server.route('/expense-reports')
+# def expensereports():
+#     return render_template('expense-reports.html')
+#
+# @server.route('/expense-reports-detailed')
+# def edrd():
+#     return render_template('expense-reports-detailed.html')
+#
+# @server.route('/exepnse-yearwise-reports')
+# def expenseyearwisereports():
+#     return render_template('expense-yearwise-reports.html')
+#
+# @server.route('/expense-yearwise-reports-detailed')
+# def eywd():
+#     return render_template('expense-yearwise-reports-detailed.html')
+#
+# @server.route('/manage-expense')
+# def manageexpense():
+#     return render_template('manage-expense.html')
 
 
 if __name__ == '__main__':

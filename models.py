@@ -6,9 +6,9 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     email = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(100), nullable=False)
+    password = db.Column(db.String(100))
     mobno = db.Column(db.Unicode(255), nullable=False)
-    regdate = db.Column(db.Datetime, nullable=False)
+    regdate = db.Column(db.Date, nullable=False)
 
 
 class expenses(UserMixin, db.Model):
