@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, flash, redirect, session, url
 from flask_mysqldb import MySQL
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
-from .models import User, expenses
+from .models import User, expenses, ExpCategory
 from . import db
 
 server = Blueprint('server',__name__)
@@ -25,7 +25,7 @@ def add_expense():
     if request.method == 'POST':
 
         # userId =  # TODO: Add from Flask Login
-        userId = 1
+        userId = current_user.id
         ExpenseDate = request.form['dateexpense']
         ExpenseCategory = request.form['category']
         ExpenseAmount = request.form['amount']
@@ -37,7 +37,9 @@ def add_expense():
         flash('Transaction Added Successfully')
         return redirect(url_for('server.add_expense'))
 
-    return render_template('add-expense.html')
+    get_category = ExpCategory.query.filter_by()
+
+    return render_template('add-expense.html',catlist = get_category)
 
 # @server.route('/expense-datewise-reports',methods=['POST','GET'])
 # def expensedatewisereports():

@@ -15,6 +15,11 @@ class expenses(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     UserId = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
     expDate = db.Column(db.Date, nullable = False)
-    expCategory = db.Column(db.String(50), nullable = False)
+    expCategory = db.Column(db.Integer, db.ForeignKey('exp_category.id'), nullable=False)
     expAmount = db.Column(db.Integer, nullable = False)
     expDesc = db.Column(db.String(100), nullable = False)
+
+
+class ExpCategory(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    catName = db.Column(db.String(100))
