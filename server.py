@@ -1,11 +1,12 @@
 from flask import Flask, render_template, request, flash, redirect, session, url_for, Blueprint
-from flask_mysqldb import MySQL
-from flask_sqlalchemy import SQLAlchemy
 from flask_login import login_required, current_user
 from .models import User, expenses, ExpCategory
 from . import db
+from bokeh.models import ColumnDataSource
+from bokeh.plotting import figure, output_file, show
 
 server = Blueprint('server',__name__)
+source = ColumnDataSource()
 
 
 @server.route('/dashboard',methods=['GET','POST'])
@@ -38,7 +39,7 @@ def add_expense():
         return redirect(url_for('server.add_expense'))
 
     get_category = ExpCategory.query.filter_by()
-
+    print(type(get_category))
     return render_template('add-expense.html',catlist = get_category)
 
 # @server.route('/expense-datewise-reports',methods=['POST','GET'])
