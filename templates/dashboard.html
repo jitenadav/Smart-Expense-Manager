@@ -8,7 +8,19 @@
 	<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
 	<link href="{{ url_for('static', filename='css/datepicker3.css') }}" rel="stylesheet">
 	<link href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet">
-
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+	<script>
+	var colorArray = ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6',
+											'#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+											'#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A',
+											'#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+											'#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC',
+											'#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+											'#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680',
+											'#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+											'#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
+											'#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
+	</script>
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 	<!--[if lt IE 9]>
@@ -55,13 +67,31 @@ $sum_today_expense=$result['todaysexpense'];
  ?>
 
 						<h4>Today's Expense</h4>
-						<div class="easypiechart" id="easypiechart-blue" data-percent="<?php echo $sum_today_expense;?>" ><span class="percent"><?php if($sum_today_expense==""){
-echo "0";
-} else {
-echo $sum_today_expense;
-}
 
-	?></span></div>
+						<canvas id="myChart"></canvas>
+						<script>
+
+						var mydata = [1700, 100, 75, 172, 2000, 2030, 22000];
+						var ctx = document.getElementById('myChart').getContext('2d');
+						var chart = new Chart(ctx, {
+    				// The type of chart we want to create
+				    type: 'pie',
+
+				    // The data for our dataset
+				    data: {
+				        labels: ['EMI', 'Food & Drinks', 'Grocery', 'Coffee', 'Savings', 'Shopping', 'Stocks'],
+				        datasets: [{
+				            label: 'Todays Expense' + mydata.length,
+										backgroundColor: colorArray,
+				            data: mydata
+				        }]
+				    },
+
+				    // Configuration options go here
+				    options: {}
+				});
+						</script>
+
 					</div>
 				</div>
 			</div>
