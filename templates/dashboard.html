@@ -8,6 +8,7 @@
 	<link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
 	<link href="{{ url_for('static', filename='css/datepicker3.css') }}" rel="stylesheet">
 	<link href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet">
+	<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -55,13 +56,29 @@ $sum_today_expense=$result['todaysexpense'];
  ?>
 
 						<h4>Today's Expense</h4>
-						<div class="easypiechart" id="easypiechart-blue" data-percent="<?php echo $sum_today_expense;?>" ><span class="percent"><?php if($sum_today_expense==""){
-echo "0";
-} else {
-echo $sum_today_expense;
-}
 
-	?></span></div>
+						<canvas id="myChart"></canvas>
+						<script>
+
+						var ctx = document.getElementById('myChart').getContext('2d');
+						var chart = new Chart(ctx, {
+    				// The type of chart we want to create
+				    type: 'pie',
+
+				    // The data for our dataset
+				    data: {
+				        labels: ['EMI', 'Food & Drinks', 'Grocery', 'Coffee', 'Savings', 'Shopping', 'Stocks'],
+				        datasets: [{
+				            label: 'Todays Expense',
+				            data: [1700, 100, 75, 172, 2000, 2030, 22000]
+				        }]
+				    },
+
+				    // Configuration options go here
+				    options: {}
+				});
+						</script>
+
 					</div>
 				</div>
 			</div>
