@@ -85,9 +85,9 @@ def expensedatewisereportsdetailed():
 def expensemonthwisereports():
     return render_template('expense-monthwise-reports.html')
 #
-# @server.route('/expense-reports')
-# def expensereports():
-#     return render_template('expense-reports.html')
+@server.route('/monthwise-reports-detailed',methods=['POST','GET'])
+def expensereports():
+    return render_template('monthwise-detail-reports.html')
 #
 # @server.route('/expense-reports-detailed')
 # def edrd():
@@ -97,7 +97,7 @@ def expensemonthwisereports():
 def expenseyearwisereports():
     return render_template('expense-yearwise-reports.html')
 #
-@server.route('/yearwise-reports-detailed')
+@server.route('/yearwise-reports-detailed',methods=['POST','GET'])
 def eywd():
     return render_template('expense-yearwise-reports-detailed.html')
 #
