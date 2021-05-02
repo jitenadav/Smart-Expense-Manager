@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, flash, redirect, session, url_for, Blueprint
 from flask_login import login_required, current_user
+from flask_paginate import Pagination, get_page_parameter
 from .models import User, expenses, ExpCategory
 from . import db
 import logging
@@ -16,10 +17,11 @@ source = ColumnDataSource()
 @server.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
+    uid = current_user.id
     # Bar graph Year's Expense
     year = datetime.date.today().year
     months = {'January':0,'February':0,'March':0,'April':0,'May':0,'June':0,'July':0,'August':0,'September':0,'October':0,'November':0,'December':0}
-    result = db.engine.execute(text("select *, MONTHNAME(CONCAT(DATE,'-','01')) as datet from (select DATE_FORMAT(expDate, '%Y-%m') as DATE, SUM(expAmount) as Total_Amount from expenses group by DATE_FORMAT(expDate, '%Y-%m') having DATE={} ) as subq".format(year)))
+    result = db.engine.execute(text("select *, MONTHNAME(CONCAT(DATE,'-','01')) as datet from (select DATE_FORMAT(expDate, '%Y-%m') as DATE, SUM(expAmount) as Total_Amount from expenses where UserId ={} group by DATE_FORMAT(expDate, '%Y-%m') having DATE={} ) as subq".format(uid,year)))
     for row in result:
         months[row[2]] = int(row[1])
     bar_labels = list(months.keys())
@@ -28,7 +30,7 @@ def dashboard():
     # Pie chart Month's Expense
     month = '0'
     month += str(datetime.date.today().month)
-    piresult = db.engine.execute(text("select catName,DATE_FORMAT(expDate,'%Y-%m') as Month, SUM(expAmount) from expenses e, exp_category c where e.expCategory = c.id group by expCategory,DATE_FORMAT(expDate,'%Y-%m') having Month = '{}-{}';".format('    ','01')))
+    piresult = db.engine.execute(text("select catName,DATE_FORMAT(expDate,'%Y-%m') as Month, SUM(expAmount) from expenses e, exp_category c where e.expCategory = c.id and UserId={} group by expCategory,DATE_FORMAT(expDate,'%Y-%m') having Month = '{}-{}';".format(uid,year,month)))
     pie_lables = []
     pie_data = []
     for row in piresult:
@@ -102,8 +104,20 @@ def eywd():
 @server.route('/manage-expense')
 @login_required
 def manageexpense():
-    return render_template('manage-expense.html')
+    uid = current_user.id
+    page = request.args.get('page', 1, type=int)
+    result = expenses.query.filter_by(UserId=uid).order_by(expenses.expDate.desc()).paginate(page=page, per_page=20)
+    return render_template('manage-expense.html', result=result)
 
+@server.route('/manage/delete/<id>')
+@login_required
+def delete_record(id=None):
+    if id==None:
+        redirect(url_for(dashboard))
+    result = db.engine.execute(text("delete from expenses where id={}".format(id)))
+    if result:
+        flash("Record Deleted")
+        return redirect(url_for('server.manageexpense'))
 
 if __name__ == '__main__':
     app.run(debug=True)
