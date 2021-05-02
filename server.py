@@ -3,6 +3,7 @@ from flask_login import login_required, current_user
 from .models import User, expenses, ExpCategory
 from . import db
 import logging
+import json
 import datetime
 from sqlalchemy import text
 from flask_mysqldb import MySQL
@@ -16,10 +17,13 @@ source = ColumnDataSource()
 @login_required
 def dashboard():
     year = datetime.date.today().year
+    months = {'January':0,'February':0,'March':0,'April':0,'May':0,'June':0,'July':0,'August':0,'September':0,'October':0,'November':0,'December':0}
     result = db.engine.execute(text("select *, MONTHNAME(CONCAT(DATE,'-','01')) as datet from (select DATE_FORMAT(expDate, '%Y-%m') as DATE, SUM(expAmount) as Total_Amount from expenses group by DATE_FORMAT(expDate, '%Y-%m') having DATE={} ) as subq".format(year)))
     for row in result:
-        logging.warning(row[2])
-    return render_template('dashboard.html',name = current_user.name)
+        months[row[2]] = int(row[1])
+    bar_labels = list(months.keys())
+    bar_data = list(months.values())
+    return render_template('dashboard.html',name = current_user.name, bar_labels = json.dumps(bar_labels), bar_data= json.dumps(bar_data))
 
 
 @server.route('/resetpassword', methods= ['POST','GET'])

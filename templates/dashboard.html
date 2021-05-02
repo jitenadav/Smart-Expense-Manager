@@ -256,6 +256,8 @@ $sum_today_expense=$result['todaysexpense'];
 						<script>
 
 						var ctx = document.getElementById('myChart3').getContext('2d');
+						var plabel = {{ bar_labels|safe }}
+						var pdata = {{ bar_data|safe }}
 						var chart = new Chart(ctx, {
     				// The type of chart we want to create
 				    type: 'bar',
@@ -265,11 +267,11 @@ $sum_today_expense=$result['todaysexpense'];
 
 				    data: {
 
-				        labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JULY','AUG','SEP','OCT','NOV','DEC'],
+				        labels: plabel,
 				        datasets: [{
 				            label: 'Click to hide',
 										backgroundColor :colorArray,
-				            data: [17001, 10230, 17556, 15712, 20001, 2030, 25000,12311,42422,64234,23526,85687,42141]
+				            data: pdata
 				        }]
 				    },
 
