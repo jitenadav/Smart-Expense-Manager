@@ -28,7 +28,7 @@ def dashboard():
     # Pie chart Month's Expense
     month = '0'
     month += str(datetime.date.today().month)
-    piresult = db.engine.execute(text("select catName,DATE_FORMAT(expDate,'%Y-%m') as Month, SUM(expAmount) from expenses e, exp_category c where e.expCategory = c.id group by expCategory,DATE_FORMAT(expDate,'%Y-%m') having Month = '{}-{}';".format('2020','01')))
+    piresult = db.engine.execute(text("select catName,DATE_FORMAT(expDate,'%Y-%m') as Month, SUM(expAmount) from expenses e, exp_category c where e.expCategory = c.id group by expCategory,DATE_FORMAT(expDate,'%Y-%m') having Month = '{}-{}';".format('    ','01')))
     pie_lables = []
     pie_data = []
     for row in piresult:
