@@ -2,21 +2,29 @@ from flask import Flask, render_template, request, flash, redirect, session, url
 from flask_login import login_required, current_user
 from .models import User, expenses, ExpCategory
 from . import db
+import logging
+import datetime
+from sqlalchemy import text
+from flask_mysqldb import MySQL
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, output_file, show
 
 server = Blueprint('server',__name__)
 source = ColumnDataSource()
 
-
 @server.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
+    year = datetime.date.today().year
+    result = db.engine.execute(text("select *, MONTHNAME(CONCAT(DATE,'-','01')) as datet from (select DATE_FORMAT(expDate, '%Y-%m') as DATE, SUM(expAmount) as Total_Amount from expenses group by DATE_FORMAT(expDate, '%Y-%m') having DATE={} ) as subq".format(year)))
+    for row in result:
+        logging.warning(row[2])
     return render_template('dashboard.html',name = current_user.name)
 
 
 @server.route('/resetpassword', methods= ['POST','GET'])
 def resetpassword():
+
     return render_template('reset_password.html')
 
 
