@@ -66,17 +66,22 @@ def add_expense():
     print(type(get_category))
     return render_template('add-expense.html',catlist = get_category)
 
-# @server.route('/expense-datewise-reports',methods=['POST','GET'])
-# def expensedatewisereports():
-#     return render_template('expense-datewise-reports.html')
+@server.route('/profile')
+@login_required
+def profile():
+    return render_template('user-profile.html')
+
+@server.route('/datewise-reports',methods=['POST','GET'])
+def expensedatewisereports():
+    return render_template('expense-datewise-reports.html')
+
+@server.route('/datewise-reports-detailed',methods=['POST','GET'])
+def expensedatewisereportsdetailed():
+    return render_template('expense-datewise-reports-detailed.html')
 #
-# @server.route('/expense-datewise-reports-detailed',methods=['POST','GET'])
-# def expensedatewisereportsdetailed():
-#     return render_template('expense-datewise-reports-detailed.html')
-#
-# @server.route('/expense-monthwise-reports',methods=['POST','GET'])
-# def expensemonthwisereports():
-#     return render_template('expense-monthwise-reports.html')
+@server.route('/monthwise-reports',methods=['POST','GET'])
+def expensemonthwisereports():
+    return render_template('expense-monthwise-reports.html')
 #
 # @server.route('/expense-reports')
 # def expensereports():
@@ -86,17 +91,18 @@ def add_expense():
 # def edrd():
 #     return render_template('expense-reports-detailed.html')
 #
-# @server.route('/exepnse-yearwise-reports')
-# def expenseyearwisereports():
-#     return render_template('expense-yearwise-reports.html')
+@server.route('/yearwise-reports')
+def expenseyearwisereports():
+    return render_template('expense-yearwise-reports.html')
 #
-# @server.route('/expense-yearwise-reports-detailed')
-# def eywd():
-#     return render_template('expense-yearwise-reports-detailed.html')
+@server.route('/yearwise-reports-detailed')
+def eywd():
+    return render_template('expense-yearwise-reports-detailed.html')
 #
-# @server.route('/manage-expense')
-# def manageexpense():
-#     return render_template('manage-expense.html')
+@server.route('/manage-expense')
+@login_required
+def manageexpense():
+    return render_template('manage-expense.html')
 
 
 if __name__ == '__main__':

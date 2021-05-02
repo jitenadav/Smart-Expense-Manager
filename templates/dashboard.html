@@ -87,7 +87,7 @@ $name=$row['FullName'];
                     <li><a class="" href="/add-expense">
                         <span class="fa fa-arrow-right">&nbsp;</span> Add Expenses
                     </a></li>
-                    <li><a class="" href="manage-expense.php">
+                    <li><a class="" href="/manage-expense">
                         <span class="fa fa-arrow-right">&nbsp;</span> Manage Expenses
                     </a></li>
 
@@ -99,13 +99,13 @@ $name=$row['FullName'];
                 <em class="fa fa-navicon">&nbsp;</em>Expense Report <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
                 </a>
                 <ul class="children collapse" id="sub-item-2">
-                    <li><a class="" href="expense-datewise-reports.php">
+                    <li><a class="" href="/datewise-reports">
                         <span class="fa fa-arrow-right">&nbsp;</span> Daywise Expenses
                     </a></li>
-                    <li><a class="" href="expense-monthwise-reports.php">
+                    <li><a class="" href="/monthwise-reports">
                         <span class="fa fa-arrow-right">&nbsp;</span> Monthwise Expenses
                     </a></li>
-                    <li><a class="" href="expense-yearwise-reports.php">
+                    <li><a class="" href="/yearwise-reports">
                         <span class="fa fa-arrow-right">&nbsp;</span> Yearwise Expenses
                     </a></li>
 
@@ -116,8 +116,8 @@ $name=$row['FullName'];
 
 
 
-            <li><a href="user-profile.php"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
-             <li><a href="change-password.php"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
+            <li><a href="/profile"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
+             <li><a href="/resetpassword"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
 <li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 
         </ul>
@@ -143,94 +143,6 @@ $name=$row['FullName'];
 
 
 		<div class="row">
-			<div class="col-lg-6 col-md-3">
-
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
-<?php
-//Today Expense
-$userid=$_SESSION['detsuid'];
-$tdate=date('Y-m-d');
-$query=mysqli_query($con,"select sum(ExpenseCost)  as todaysexpense from tblexpense where (ExpenseDate)='$tdate' && (UserId='$userid');");
-$result=mysqli_fetch_array($query);
-$sum_today_expense=$result['todaysexpense'];
- ?>
-
-						<h4>Today's Expense</h4>
-
-						<canvas id="myChart"></canvas>
-						<script>
-
-						var ctx = document.getElementById('myChart').getContext('2d');
-						var chart = new Chart(ctx, {
-    				// The type of chart we want to create
-				    type: 'line',
-						theme: 'light2',
-
-				    // The data for our dataset
-				    data: {
-				        labels: ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JULY','AUG','SEP','OCT','NOV','DEC'],
-				        datasets: [{
-				            label: 'Todays Expense',
-										backgroundColor :colorArray,
-				            data: [1700, 100, 75, 172, 2000, 2030, 22000]
-				        }]
-				    },
-
-				    // Configuration options go here
-				    options: {legend : {display:false}}
-				});
-						</script>
-
-					</div>
-				</div>
-			</div>
-
-
-
-
-
-
-
-
-			<div class="col-lg-6 col-md-3">
-
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
-
-						<h4>This Month's Expense</h4>
-
-						<canvas id="myChart1"></canvas>
-						<script>
-
-						var ctx = document.getElementById('myChart1').getContext('2d');
-						// var plabel =
-						// var pdata =
-						var chart = new Chart(ctx, {
-    				// The type of chart we want to create
-				    type: 'pie',
-						theme: 'light2',
-
-				    // The data for our dataset
-				    data: {
-				        labels: {{ pie_lables|safe }},
-				        datasets: [{
-				            label: 'Todays Expense',
-										backgroundColor :["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC"],
-				            data: {{ pie_data|safe }}
-				        }]
-				    },
-
-				    // Configuration options go here
-				    options: {}
-				});
-						</script>
-
-					</div>
-				</div>
-			</div>
-
-
 			<div class="col-lg-6 col-md-3">
 
 				<div class="panel panel-default">
@@ -279,25 +191,34 @@ $sum_today_expense=$result['todaysexpense'];
 				</div>
 			</div>
 
+
 			<div class="col-lg-6 col-md-3">
 
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
-<?php
-//Today Expense
-$userid=$_SESSION['detsuid'];
-$tdate=date('Y-m-d');
-$query=mysqli_query($con,"select sum(ExpenseCost)  as todaysexpense from tblexpense where (ExpenseDate)='$tdate' && (UserId='$userid');");
-$result=mysqli_fetch_array($query);
-$sum_today_expense=$result['todaysexpense'];
- ?>
 
-						<h4>Today's Expense</h4>
+						<h4>Recent Transactions</h4>
 
-						<canvas id="myChart4"></canvas>
+
+
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-lg-6 col-md-3">
+
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+
+						<h4>This Month's Expense</h4>
+
+						<canvas id="myChart1"></canvas>
 						<script>
 
-						var ctx = document.getElementById('myChart4').getContext('2d');
+						var ctx = document.getElementById('myChart1').getContext('2d');
+						// var plabel =
+						// var pdata =
 						var chart = new Chart(ctx, {
     				// The type of chart we want to create
 				    type: 'pie',
@@ -305,11 +226,11 @@ $sum_today_expense=$result['todaysexpense'];
 
 				    // The data for our dataset
 				    data: {
-				        labels: ['EMI', 'Food & Drinks', 'Grocery', 'Coffee', 'Savings', 'Shopping', 'Stocks'],
+				        labels: {{ pie_lables|safe }},
 				        datasets: [{
 				            label: 'Todays Expense',
 										backgroundColor :["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC"],
-				            data: [1700, 100, 75, 172, 2000, 2030, 22000]
+				            data: {{ pie_data|safe }}
 				        }]
 				    },
 
@@ -321,6 +242,11 @@ $sum_today_expense=$result['todaysexpense'];
 					</div>
 				</div>
 			</div>
+
+
+
+
+
 
 
 
