@@ -197,21 +197,15 @@ $sum_today_expense=$result['todaysexpense'];
 
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
-<?php
-//Today Expense
-$userid=$_SESSION['detsuid'];
-$tdate=date('Y-m-d');
-$query=mysqli_query($con,"select sum(ExpenseCost)  as todaysexpense from tblexpense where (ExpenseDate)='$tdate' && (UserId='$userid');");
-$result=mysqli_fetch_array($query);
-$sum_today_expense=$result['todaysexpense'];
- ?>
 
-						<h4>Today's Expense</h4>
+						<h4>This Month's Expense</h4>
 
 						<canvas id="myChart1"></canvas>
 						<script>
 
 						var ctx = document.getElementById('myChart1').getContext('2d');
+						// var plabel =
+						// var pdata =
 						var chart = new Chart(ctx, {
     				// The type of chart we want to create
 				    type: 'pie',
@@ -219,11 +213,11 @@ $sum_today_expense=$result['todaysexpense'];
 
 				    // The data for our dataset
 				    data: {
-				        labels: ['EMI', 'Food & Drinks', 'Grocery', 'Coffee', 'Savings', 'Shopping', 'Stocks'],
+				        labels: {{ pie_lables|safe }},
 				        datasets: [{
 				            label: 'Todays Expense',
 										backgroundColor :["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC"],
-				            data: [1700, 100, 75, 172, 2000, 2030, 22000]
+				            data: {{ pie_data|safe }}
 				        }]
 				    },
 

@@ -16,6 +16,7 @@ source = ColumnDataSource()
 @server.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
+    # Bar graph Year's Expense
     year = datetime.date.today().year
     months = {'January':0,'February':0,'March':0,'April':0,'May':0,'June':0,'July':0,'August':0,'September':0,'October':0,'November':0,'December':0}
     result = db.engine.execute(text("select *, MONTHNAME(CONCAT(DATE,'-','01')) as datet from (select DATE_FORMAT(expDate, '%Y-%m') as DATE, SUM(expAmount) as Total_Amount from expenses group by DATE_FORMAT(expDate, '%Y-%m') having DATE={} ) as subq".format(year)))
@@ -23,7 +24,18 @@ def dashboard():
         months[row[2]] = int(row[1])
     bar_labels = list(months.keys())
     bar_data = list(months.values())
-    return render_template('dashboard.html',name = current_user.name, bar_labels = json.dumps(bar_labels), bar_data= json.dumps(bar_data))
+
+    # Pie chart Month's Expense
+    month = '0'
+    month += str(datetime.date.today().month)
+    piresult = db.engine.execute(text("select catName,DATE_FORMAT(expDate,'%Y-%m') as Month, SUM(expAmount) from expenses e, exp_category c where e.expCategory = c.id group by expCategory,DATE_FORMAT(expDate,'%Y-%m') having Month = '{}-{}';".format('2020','01')))
+    pie_lables = []
+    pie_data = []
+    for row in piresult:
+        pie_lables.append(row[0])
+        pie_data.append(int(row[2]))
+    return render_template('dashboard.html',name = current_user.name, bar_labels = json.dumps(bar_labels), bar_data= json.dumps(bar_data),
+                            pie_lables = json.dumps(pie_lables), pie_data = json.dumps(pie_data))
 
 
 @server.route('/resetpassword', methods= ['POST','GET'])
