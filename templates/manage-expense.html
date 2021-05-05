@@ -144,7 +144,7 @@ $name=$row['FullName'];
                 <td>{{ loop.index}}</td>
 
                 <td>{{row.expDesc}}</td>
-                <td>{{row.expCategory}}</td>
+                <td>{{row.catName}}</td>
                 <td>{{row.expDate}}</td>
                 <td>{{row.expAmount}}</td>
                 {% set url = "/manage/delete/{}".format(row.id) %}

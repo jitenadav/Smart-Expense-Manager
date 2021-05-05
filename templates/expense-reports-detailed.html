@@ -41,13 +41,7 @@
 
 						<div class="col-md-12">
 
-<?php
-$fdate=$_POST['fromdate'];
- $tdate=$_POST['todate'];
-$rtype=$_POST['requesttype'];
-?>
-<h5 align="center" style="color:blue">Expense Report from <?php echo $fdate?> to <?php echo $tdate?></h5>
-<hr />
+<h5 align="center" style="color:blue">Expense Report from {{fromdate}} to {{todate}}
                                     <table id="datatable" class="table table-bordered dt-responsive nowrap" style="border-collapse: collapse; border-spacing: 0; width: 100%;">
                                         <thead>
                                         <tr>
@@ -58,27 +52,16 @@ $rtype=$_POST['requesttype'];
                 </tr>
                                         </tr>
                                         </thead>
- <?php
-$userid=$_SESSION['detsuid'];
-$ret=mysqli_query($con,"SELECT ExpenseDate,SUM(ExpenseCost) as totaldaily FROM tblexpense  where (ExpenseDate BETWEEN '$fdate' and '$tdate') && (UserId='$userid') group by ExpenseDate");
-$cnt=1;
-while ($row=mysqli_fetch_array($ret)) {
-
-?>
-
+								{% for row in result %}
                 <tr>
-                  <td><?php echo $cnt;?></td>
+                  <td>{{ loop.index }}</td>
 
-                  <td><?php  echo $row['ExpenseDate'];?></td>
-                  <td><?php  echo $ttlsl=$row['totaldaily'];?></td>
+                  <td>{{ row[0] }}</td>
+                  <td>{{ row[1] }}</td>
 
 
                 </tr>
-                <?php
-                $totalsexp+=$ttlsl;
-$cnt=$cnt+1;
-}?>
-
+									{% endfor %}
  <tr>
   <th colspan="2" style="text-align:center">Grand Total</th>
   <td><?php echo $totalsexp;?></td>

@@ -70,43 +70,68 @@ def add_expense():
 
 @server.route('/profile')
 @login_required
+@login_required
 def profile():
     return render_template('user-profile.html')
 
 @server.route('/datewise-reports',methods=['POST','GET'])
+@login_required
 def expensedatewisereports():
     return render_template('expense-datewise-reports.html')
 
 @server.route('/datewise-reports-detailed',methods=['POST','GET'])
+@login_required
 def expensedatewisereportsdetailed():
-    return render_template('expense-datewise-reports-detailed.html')
-#
+    uid = current_user.id
+    fromdate = request.form['fromdate']
+    todate = request.form['todate']
+    result = db.engine.execute(text("select expDate,SUM(expAmount) from expenses where expDate>='{}' and expDate<='{}' and UserId = {} group by expDate order by expDate desc".format(fromdate, todate, uid)))
+    totalAmount = db.engine.execute(text("select SUM(expAmount) from expenses where expDate>='{}' and expDate<='{}' and UserId = {}".format(fromdate, todate, uid)))
+    for amount in totalAmount:
+        total = amount[0]
+    return render_template('expense-datewise-reports-detailed.html', fdate=fromdate, tdate = todate, result=result, total=total)
+
 @server.route('/monthwise-reports',methods=['POST','GET'])
+@login_required
 def expensemonthwisereports():
     return render_template('expense-monthwise-reports.html')
-#
+
 @server.route('/monthwise-reports-detailed',methods=['POST','GET'])
+@login_required
 def expensereports():
-    return render_template('monthwise-detail-reports.html')
-#
+    uid = current_user.id
+    fromdate = request.form['fromdate']
+    todate = request.form['todate']
+    fromdate = "-".join(fromdate.split('-')[0:2]) + '-' + '01'
+    todate = "-".join(todate.split('-')[0:2]) + '-' + '01'
+    if fromdate.split('-')[1] == todate.split('-')[1]:
+        todate = todate.split('-')[0] + '-' + '0'+str(int(todate.split('-')[1]) + 1 ) + '-'+ '01'
+    result = db.engine.execute(text("select DATE_FORMAT(expDate, '%Y-%m'),SUM(expAmount) from expenses where expDate>='{}' and expDate<='{}' and UserId = {} group by DATE_FORMAT(expDate, '%Y-%m')".format(fromdate, todate, uid)))
+    totalAmount = db.engine.execute(text("select SUM(expAmount) from expenses where expDate>='{}' and expDate<='{}' and UserId = {}".format(fromdate, todate, uid)))
+    for amount in totalAmount:
+        total = amount[0]
+    return render_template('monthwise-detail-reports.html', fromdate=fromdate, todate=todate, result=result, total = total)
+
 # @server.route('/expense-reports-detailed')
 # def edrd():
 #     return render_template('expense-reports-detailed.html')
-#
+
 @server.route('/yearwise-reports')
+@login_required
 def expenseyearwisereports():
     return render_template('expense-yearwise-reports.html')
-#
+
 @server.route('/yearwise-reports-detailed',methods=['POST','GET'])
+@login_required
 def eywd():
     return render_template('expense-yearwise-reports-detailed.html')
-#
+
 @server.route('/manage-expense')
 @login_required
 def manageexpense():
     uid = current_user.id
     page = request.args.get('page', 1, type=int)
-    result = expenses.query.filter_by(UserId=uid).order_by(expenses.expDate.desc()).paginate(page=page, per_page=20)
+    result = expenses.query.filter_by(UserId=uid).join(ExpCategory, expenses.expCategory==ExpCategory.id).add_columns(expenses.id,expenses.expDesc, expenses.expDate, expenses.expAmount,ExpCategory.catName).order_by(expenses.expDate.desc()).paginate(page=page, per_page=20)
     return render_template('manage-expense.html', result=result)
 
 @server.route('/manage/delete/<id>')
