@@ -68,11 +68,20 @@ def add_expense():
     print(type(get_category))
     return render_template('add-expense.html',catlist = get_category)
 
-@server.route('/profile')
-@login_required
+@server.route('/profile', methods=['GET','POST'])
 @login_required
 def profile():
-    return render_template('user-profile.html')
+    uid = current_user.id
+    if request.method == 'POST' :
+        fname = request.form['fullname']
+        mobno = request.form['contactnumber']
+        db.engine.execute(text("UPDATE user SET name='{}', mobno={} where id={}".format(fname,mobno, uid)))
+        flash("Profile Updated Successfully")
+        return redirect(url_for('server.profile'))
+    result = User.query.filter_by(id=uid)
+    res = result[0]
+    logging.warning(res.name)
+    return render_template('user-profile.html', result=res)
 
 @server.route('/datewise-reports',methods=['POST','GET'])
 @login_required
@@ -124,7 +133,18 @@ def expenseyearwisereports():
 @server.route('/yearwise-reports-detailed',methods=['POST','GET'])
 @login_required
 def eywd():
-    return render_template('expense-yearwise-reports-detailed.html')
+    uid = current_user.id
+    fromdate = request.form['fromdate']
+    todate = request.form['todate']
+    fromdate = "-".join(fromdate.split('-')[0:2]) + '-' + '01'
+    todate = "-".join(todate.split('-')[0:2]) + '-' + '01'
+    if fromdate.split('-')[0] == todate.split('-')[0]:
+        todate = todate.split('-')[0] + '-' + '0'+str(int(todate.split('-')[1]) + 1 ) + '-'+ '01'
+    result = db.engine.execute(text("select DATE_FORMAT(expDate, '%Y'),SUM(expAmount) from expenses where expDate>='{}' and expDate<='{}' and UserId={} group by DATE_FORMAT(expDate, '%Y')".format(fromdate, todate, uid)))
+    totalAmount = db.engine.execute(text("select SUM(expAmount) from expenses where expDate>='{}' and expDate<='{}' and UserId = {}".format(fromdate, todate, uid)))
+    for amount in totalAmount:
+        total = amount[0]
+    return render_template('expense-yearwise-reports-detailed.html', fromdate=fromdate, todate=todate, result=result, total = total)
 
 @server.route('/manage-expense')
 @login_required
@@ -143,6 +163,8 @@ def delete_record(id=None):
     if result:
         flash("Record Deleted")
         return redirect(url_for('server.manageexpense'))
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)

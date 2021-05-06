@@ -42,14 +42,8 @@
 								<img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
 						</div>
 						<div class="profile-usertitle">
-								<?php
-	$uid=$_SESSION['detsuid'];
-	$ret=mysqli_query($con,"select FullName from tbluser where ID='$uid'");
-	$row=mysqli_fetch_array($ret);
-	$name=$row['FullName'];
 
-	?>
-								<div class="profile-usertitle-name"><?php echo $name; ?></div>
+								<div class="profile-usertitle-name">{{result.name}}</div>
 								<div class="profile-usertitle-status"><span class="indicator label-success"></span>Online</div>
 						</div>
 						<div class="clear"></div>
@@ -98,24 +92,13 @@
 
 
 						<li><a href="/profile"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
-						 <li><a href="/resetpassword"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
+						 <li><a href="/changepassword"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
 	<li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 
 				</ul>
 		</div>
 	<!--sidebar end-->
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
-		<div class="row">
-			<ol class="breadcrumb">
-				<li><a href="#">
-					<em class="fa fa-home"></em>
-				</a></li>
-				<li class="active">Profile</li>
-			</ol>
-		</div><!--/.row-->
-
-
-
 
 		<div class="row">
 			<div class="col-lg-12">
@@ -125,34 +108,32 @@
 				<div class="panel panel-default">
 					<div class="panel-heading">Profile</div>
 					<div class="panel-body">
-						<p style="font-size:16px; color:red" align="center"> <?php if($msg){
-    echo $msg;
-  }  ?> </p>
+						{% with messages = get_flashed_messages() %}
+		         	{% if messages %}
+							{% for message in messages %}
+						<p style="font-size:16px; color:red" align="center">  {{message}}</p>
+						{% endfor %}
+          {% endif %}
+       {% endwith %}
 						<div class="col-md-12">
-							 <?php
-$userid=$_SESSION['detsuid'];
-$ret=mysqli_query($con,"select * from tbluser where ID='$userid'");
-$cnt=1;
-while ($row=mysqli_fetch_array($ret)) {
 
-?>
-							<form role="form" method="post" action="">
+							<form role="form" method="post" action="/profile">
 								<div class="form-group">
 									<label>Full Name</label>
-									<input class="form-control" type="text" value="<?php  echo $row['FullName'];?>" name="fullname" required="true">
+									<input class="form-control" type="text" value="{{result.name}}" name="fullname" required="true">
 								</div>
 								<div class="form-group">
 									<label>Email</label>
-<input type="email" class="form-control" name="email" value="<?php  echo $row['Email'];?>" required="true" readonly="true">
+<input type="email" class="form-control" name="email" value="{{result.email}}" required="true" readonly="true">
 								</div>
 
 								<div class="form-group">
 									<label>Mobile Number</label>
-									<input class="form-control" type="text" value="<?php  echo $row['MobileNumber'];?>" required="true" name="contactnumber" maxlength="10">
+									<input class="form-control" type="text" value="{{result.mobno}}" required="true" name="contactnumber" maxlength="10">
 								</div>
 								<div class="form-group">
 									<label>Registration Date</label>
-									<input class="form-control" name="regdate" type="text" value="<?php  echo $row['RegDate'];?>" readonly="true">
+									<input class="form-control" name="regdate" type="text" value="{{result.regdate}}" readonly="true">
 								</div>
 
 								<div class="form-group has-success">
