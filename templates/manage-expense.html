@@ -9,7 +9,6 @@
 <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/datepicker3.css') }}" rel="stylesheet">
 <link href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet">
-
 <!--Custom Font-->
 <link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 <!--[if lt IE 9]>
@@ -20,7 +19,6 @@
 <body>
 <?php include_once('includes/header.php');?>
 <?php include_once('includes/sidebar.php');?>
-<!-- header html -->
 <nav class="navbar navbar-custom navbar-fixed-top" role="navigation">
       <div class="container-fluid">
           <div class="navbar-header">
@@ -35,97 +33,142 @@
       </div>
       <!-- /.container-fluid -->
   </nav>
-  <!-- sidebarhtml -->
-
-<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
-      <div class="profile-sidebar">
-          <div class="profile-userpic">
-              <img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
-          </div>
-          <div class="profile-usertitle">
-              <?php
+  <div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
+        <div class="profile-sidebar">
+            <div class="profile-userpic">
+                <img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+            </div>
+            <div class="profile-usertitle">
+                <?php
 $uid=$_SESSION['detsuid'];
 $ret=mysqli_query($con,"select FullName from tbluser where ID='$uid'");
 $row=mysqli_fetch_array($ret);
 $name=$row['FullName'];
 
 ?>
-              <div class="profile-usertitle-name"><?php echo $name; ?></div>
-              <div class="profile-usertitle-status"><span class="indicator label-success"></span>Online</div>
-          </div>
-          <div class="clear"></div>
-      </div>
-      <div class="divider"></div>
+                <div class="profile-usertitle-name"><?php echo $name; ?></div>
+                <div class="profile-usertitle-status"><span class="indicator label-success"></span>Online</div>
+            </div>
+            <div class="clear"></div>
+        </div>
+        <div class="divider"></div>
 
-      <ul class="nav menu">
-          <li class="active"><a href="/dashboard"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
-
-
-
-          <li class="parent "><a data-toggle="collapse" href="#sub-item-1">
-              <em class="fa fa-navicon">&nbsp;</em>Expenses <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
-              </a>
-              <ul class="children collapse" id="sub-item-1">
-                  <li><a class="" href="/add-expense">
-                      <span class="fa fa-arrow-right">&nbsp;</span> Add Expenses
-                  </a></li>
-                  <li><a class="" href="/manage-expense">
-                      <span class="fa fa-arrow-right">&nbsp;</span> Manage Expenses
-                  </a></li>
-
-              </ul>
-
-          </li>
-
-<li class="parent "><a data-toggle="collapse" href="#sub-item-2">
-              <em class="fa fa-navicon">&nbsp;</em>Expense Report <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
-              </a>
-              <ul class="children collapse" id="sub-item-2">
-                  <li><a class="" href="/datewise-reports">
-                      <span class="fa fa-arrow-right">&nbsp;</span> Daywise Expenses
-                  </a></li>
-                  <li><a class="" href="/monthwise-reports">
-                      <span class="fa fa-arrow-right">&nbsp;</span> Monthwise Expenses
-                  </a></li>
-                  <li><a class="" href="/yearwise-reports">
-                      <span class="fa fa-arrow-right">&nbsp;</span> Yearwise Expenses
-                  </a></li>
-
-              </ul>
-          </li>
+        <ul class="nav menu">
+            <li class="active"><a href="/dashboard"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
 
 
 
+            <li class="parent "><a data-toggle="collapse" href="#sub-item-1">
+                <em class="fa fa-navicon">&nbsp;</em>Expenses <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
+                </a>
+                <ul class="children collapse" id="sub-item-1">
+                    <li><a class="" href="/add-expense">
+                        <span class="fa fa-arrow-right">&nbsp;</span> Add Expenses
+                    </a></li>
+                    <li><a class="" href="/manage-expense">
+                        <span class="fa fa-arrow-right">&nbsp;</span> Manage Expenses
+                    </a></li>
+
+                </ul>
+
+            </li>
+
+  <li class="parent "><a data-toggle="collapse" href="#sub-item-2">
+                <em class="fa fa-navicon">&nbsp;</em>Expense Report <span data-toggle="collapse" href="#sub-item-1" class="icon pull-right"><em class="fa fa-plus"></em></span>
+                </a>
+                <ul class="children collapse" id="sub-item-2">
+                    <li><a class="" href="/datewise-reports">
+                        <span class="fa fa-arrow-right">&nbsp;</span> Daywise Expenses
+                    </a></li>
+                    <li><a class="" href="/monthwise-reports">
+                        <span class="fa fa-arrow-right">&nbsp;</span> Monthwise Expenses
+                    </a></li>
+                    <li><a class="" href="/yearwise-reports">
+                        <span class="fa fa-arrow-right">&nbsp;</span> Yearwise Expenses
+                    </a></li>
+
+                </ul>
+            </li>
 
 
-          <li><a href="/profile"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
-           <li><a href="/resetpassword"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
+
+
+
+            <li><a href="/profile"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
+             <li><a href="/changepassword"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
 <li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 
-      </ul>
-  </div>
-<!--sidebar end-->
-
+        </ul>
+    </div>
 <div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
-  <div class="row">
-    <ol class="breadcrumb">
-      <li><a href="#">
-        <em class="fa fa-home"></em>
-      </a></li>
-      <li class="active">Expense</li>
-    </ol>
-  </div><!--/.row-->
-
-
-
-
   <div class="row">
     <div class="col-lg-12">
 
 
 
       <div class="panel panel-default">
+        <div class="panel-heading">Expense</div>
+        {% with messages = get_flashed_messages() %}
+         	{% if messages %}
+					{% for message in messages %}
+					<div class="notify" role="alert">
+						<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+						{{ message }}
+					</div>
+					 {% endfor %}
+         {% endif %}
+      {% endwith %}
+        <div class="panel-body">
+          <p style="font-size:16px; color:red" align="center"> <?php if($msg){
+  echo $msg;
+  }  ?> </p>
+          <div class="col-md-12">
 
+            <div class="table-responsive">
+          <table class="table table-bordered mg-b-0">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>Expense Item</th>
+                <th>Category</th>
+                <th>Expense Date</th>
+                <th>Expense Cost</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            {% for row in result.items %}
+
+            <tbody>
+              <tr>
+
+                <td>{{ loop.index}}</td>
+
+                <td>{{row.expDesc}}</td>
+                <td>{{row.catName}}</td>
+                <td>{{row.expDate}}</td>
+                <td>{{row.expAmount}}</td>
+                {% set url = "/manage/delete/{}".format(row.id) %}
+                <td><a onclick="return confirm('Record will be Deleted');" href={{url}}>Delete</a>
+              </tr>
+           {% endfor %}
+
+            </tbody>
+          </table>
+      {% for page_num in result.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+        {% if page_num %}
+          {% if result.page == page_num %}
+            <a class="btn btn-info mb-4" href="{{ url_for('server.manageexpense', page=page_num) }}">{{ page_num }}</a>
+          {% else %}
+            <a class="btn btn-outline-info mb-4" href="{{ url_for('server.manageexpense', page=page_num) }}">{{ page_num }}</a>
+          {% endif %}
+        {% else %}
+          ...
+        {% endif %}
+      {% endfor %}
+        </div>
+          </div>
+        </div>
+      </div><!-- /.panel-->
     </div><!-- /.col-->
     <?php include_once('includes/footer.php');?>
   </div><!-- /.row -->

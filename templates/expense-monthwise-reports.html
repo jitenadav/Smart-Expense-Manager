@@ -8,6 +8,21 @@
   <link href="{{ url_for('static', filename='css/font-awesome.min.css') }}" rel="stylesheet">
 	<link href="{{ url_for('static', filename='css/datepicker3.css') }}" rel="stylesheet">
 	<link href="{{ url_for('static', filename='css/styles.css')}}" rel="stylesheet">
+	<script>
+		function compare()
+		{
+			var startDt = document.getElementById("fromdate").value;
+			var endDt = document.getElementById("todate").value;
+
+			if( (new Date(startDt).getTime() > new Date(endDt).getTime()))
+			{
+				alert('From Date can be greater than To date!!')
+			}
+			else{
+
+			}
+		}
+	</script>
 
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -95,7 +110,7 @@ $name=$row['FullName'];
 
 
             <li><a href="/profile"><em class="fa fa-user">&nbsp;</em> Profile</a></li>
-             <li><a href="/resetpassword"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
+             <li><a href="/changepassword"><em class="fa fa-clone">&nbsp;</em> Change Password</a></li>
 <li><a href="/logout"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 
         </ul>
@@ -103,17 +118,6 @@ $name=$row['FullName'];
 <!--sidebar end-->
 
 	<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2 main">
-		<div class="row">
-			<ol class="breadcrumb">
-				<li><a href="#">
-					<em class="fa fa-home"></em>
-				</a></li>
-				<li class="active">Monthwise Expense Report</li>
-			</ol>
-		</div><!--/.row-->
-
-
-
 
 		<div class="row">
 			<div class="col-lg-12">
@@ -130,20 +134,20 @@ $name=$row['FullName'];
 
 
 
-							<form role="form" method="post" action="expense-monthwise-reports-detailed.php" name="bwdatesreport">
+							<form role="form" method="post" action="/monthwise-reports-detailed" name="bwdatesreport">
 								<div class="form-group">
 									<label>From Date</label>
-									<input class="form-control" type="date"  id="fromdate" name="fromdate" required="true">
+									<input class="form-control" type="date"  id="fromdate" name="fromdate" required="true" onblur="btndisable();">
 								</div>
 								<div class="form-group">
 									<label>To Date</label>
-									<input class="form-control" type="date"  id="todate" name="todate" required="true">
+									<input class="form-control" type="date"  id="todate" name="todate" required="true" onblur="compare();">
 								</div>
 
 
 
 								<div class="form-group has-success">
-									<button type="submit" class="btn btn-primary" name="submit">Submit</button>
+									<button type="submit" class="btn btn-primary" id='subbtn' name="submit">Submit</button>
 								</div>
 
 
