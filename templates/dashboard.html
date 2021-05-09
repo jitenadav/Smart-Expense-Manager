@@ -187,10 +187,38 @@ $sum_today_expense=$result['todaysexpense'];
 			<div class="col-lg-6 col-md-3">
 
 				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll padding-left: 80px; padding-right: 80px;"">
 
 						<h4>Recent Transactions</h4>
+						<div class="table-responsive" style="padding-left: 20px; padding-right: 20px;">
+          <table class="table table-bordered mg-b-0">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>Expense Item</th>
+                <th>Category</th>
+                <th>Expense Date</th>
+                <th>Expense Cost</th>
 
+              </tr>
+            </thead>
+						{% for row in recent %}
+            <tbody>
+              <tr>
+
+                <td>{{ loop.index}}</td>
+
+								<td>{{row.expDesc}}</td>
+                <td>{{row.catName}}</td>
+                <td>{{row.expDate}}</td>
+                <td>{{row.expAmount}}</td>
+              </tr>
+{% endfor %}
+
+            </tbody>
+          </table>
+
+        </div>
 
 
 					</div>
@@ -221,7 +249,7 @@ $sum_today_expense=$result['todaysexpense'];
 				        labels: {{ pie_lables|safe }},
 				        datasets: [{
 				            label: 'Todays Expense',
-										backgroundColor :["#F7464A", "#46BFBD", "#FDB45C", "#FEDCBA","#ABCDEF", "#DDDDDD", "#ABCABC"],
+										backgroundColor :colorArray,
 				            data: {{ pie_data|safe }}
 				        }]
 				    },
@@ -237,141 +265,6 @@ $sum_today_expense=$result['todaysexpense'];
 
 
 
-
-
-
-
-
-
-
-			<!-- <div class="col-lg-4 col-md-3">
-				<div class="panel panel-default">
-					<?php
-//Yestreday Expense
-$userid=$_SESSION['detsuid'];
-$ydate=date('Y-m-d',strtotime("-1 days"));
-$query1=mysqli_query($con,"select sum(ExpenseCost)  as yesterdayexpense from tblexpense where (ExpenseDate)='$ydate' && (UserId='$userid');");
-$result1=mysqli_fetch_array($query1);
-$sum_yesterday_expense=$result1['yesterdayexpense'];
- ?>
-					<div class="panel-body easypiechart-panel">
-						<h4>Yesterday's Expense</h4>
-						<div class="easypiechart" id="easypiechart-orange" data-percent="<?php echo $sum_yesterday_expense;?>" ><span class="percent"><?php if($sum_yesterday_expense==""){
-echo "0";
-} else {
-echo $sum_yesterday_expense;
-}
-
-	?></span></div>
-					</div>
-				</div>
-			</div> -->
-			<!-- <div class="col-lg-4 col-md-3">
-				<div class="panel panel-default">
-					<?php
-//Weekly Expense
-$userid=$_SESSION['detsuid'];
- $pastdate=  date("Y-m-d", strtotime("-1 week"));
-$crrntdte=date("Y-m-d");
-$query2=mysqli_query($con,"select sum(ExpenseCost)  as weeklyexpense from tblexpense where ((ExpenseDate) between '$pastdate' and '$crrntdte') && (UserId='$userid');");
-$result2=mysqli_fetch_array($query2);
-$sum_weekly_expense=$result2['weeklyexpense'];
- ?>
-					<div class="panel-body easypiechart-panel">
-						<h4>Last 7day's Expense</h4>
-						<div class="easypiechart" id="easypiechart-teal" data-percent="<?php echo $sum_weekly_expense;?>"><span class="percent"><?php if($sum_weekly_expense==""){
-echo "0";
-} else {
-echo $sum_weekly_expense;
-}
-
-	?></span></div>
-					</div>
-				</div>
-			</div> -->
-			<!-- <div class="col-lg-4 col-md-3">
-				<div class="panel panel-default">
-					<?php
-//Monthly Expense
-$userid=$_SESSION['detsuid'];
- $monthdate=  date("Y-m-d", strtotime("-1 month"));
-$crrntdte=date("Y-m-d");
-$query3=mysqli_query($con,"select sum(ExpenseCost)  as monthlyexpense from tblexpense where ((ExpenseDate) between '$monthdate' and '$crrntdte') && (UserId='$userid');");
-$result3=mysqli_fetch_array($query3);
-$sum_monthly_expense=$result3['monthlyexpense'];
- ?>
-					<div class="panel-body easypiechart-panel">
-						<h4>Last 30day's Expenses</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_monthly_expense;?>" ><span class="percent"><?php if($sum_monthly_expense==""){
-echo "0";
-} else {
-echo $sum_monthly_expense;
-}
-
-	?></span></div>
-					</div>
-				</div>
-			</div> -->
-
-		<!-- </div><!--/.row-->
-			<!-- <div class="row">
-			<div class="col-lg-4 col-md-3">
-				<div class="panel panel-default">
-					<?php
-//Yearly Expense
-$userid=$_SESSION['detsuid'];
- $cyear= date("Y");
-$query4=mysqli_query($con,"select sum(ExpenseCost)  as yearlyexpense from tblexpense where (year(ExpenseDate)='$cyear') && (UserId='$userid');");
-$result4=mysqli_fetch_array($query4);
-$sum_yearly_expense=$result4['yearlyexpense'];
- ?>
-					<div class="panel-body easypiechart-panel">
-						<h4>Current Year Expenses</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_yearly_expense;?>" ><span class="percent"><?php if($sum_yearly_expense==""){
-echo "0";
-} else {
-echo $sum_yearly_expense;
-}
-
-	?></span></div>
-
-
-					</div>
-
-				</div>
-
-			</div>
-
-		<div class="col-lg-4 col-md-3">
-				<div class="panel panel-default">
-					<?php
-//Yearly Expense
-$userid=$_SESSION['detsuid'];
-$query5=mysqli_query($con,"select sum(ExpenseCost)  as totalexpense from tblexpense where UserId='$userid';");
-$result5=mysqli_fetch_array($query5);
-$sum_total_expense=$result5['totalexpense'];
- ?>
-					<div class="panel-body easypiechart-panel">
-						<h4>Total Expenses</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="<?php echo $sum_total_expense;?>" ><span class="percent"><?php if($sum_total_expense==""){
-echo "0";
-} else {
-echo $sum_total_expense;
-}
-
-	?></span></div>
-
-
-					</div>
-
-				</div>
-
-			</div>
-
-
-		</div> -->
-
-		<!--/.row-->
 	</div>	<!--/.main-->
 	<?php include_once('includes/footer.php');?>
 	<script src="{{ url_for('static',filename='js/jquery-1.11.1.min.js')}}"></script>
