@@ -22,6 +22,7 @@
 											'#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3',
 											'#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
 	</script>
+
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
 	<!--[if lt IE 9]>
@@ -135,6 +136,110 @@ $name=$row['FullName'];
 
 
 		<div class="row">
+
+			<div class="col-lg-6 col-md-3">
+
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+
+						<h4>Recent Transactions</h4>
+						<hr>
+
+						<div class="col-lg-6 col-md-2">
+
+							<div class="panel panel-default">
+								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+
+									<h4>TOTAL1</h4>
+									<b><h2><div id="count1"><span class="count">200</span></div></h2></b>
+
+									<br>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-lg-6 col-md-3">
+
+							<div class="panel panel-default">
+								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+									<h4>TOTAL</h4>
+									<b><h2><div id="count2"><span class="count">200</span></div></h2></b>
+									<br>
+								</div>
+							</div>
+						</div>
+
+						<div class="col-lg-6 col-md-3">
+
+							<div class="panel panel-default">
+								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+
+									<h4>TOTAL2</h4>
+									<b><h2><div id="count3"><span class="count">00</span></div></h2></b>
+								</div>
+							</div>
+
+						</div>
+
+						<div class="col-lg-6 col-md-3">
+
+							<div class="panel panel-default">
+								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+
+									<h4>PREDICTED2</h4>
+										<b><h2><div id="count4"><span class="count">200</span></div></h2></b>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+
+
+			<div class="col-lg-6 col-md-3">
+
+				<div class="panel panel-default">
+					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
+
+						<h4>Recent Transactions2</h4>
+						<canvas id="myChart4"></canvas>
+						<script>
+
+						var ctx = document.getElementById('myChart4').getContext('2d');
+						var plabel = {{ bar_labels|safe }}
+						var pdata = {{ bar_data|safe }}
+						var chart = new Chart(ctx, {
+						// The type of chart we want to create
+						type: 'bar',
+						theme: 'light2',
+
+						// The data for our dataset
+
+						data: {
+
+								labels: plabel,
+								datasets: [{
+										label: 'Click to hide',
+										backgroundColor :colorArray,
+										data: pdata
+								}]
+						},
+
+
+						// Configuration options go here
+						options: {legend : {display:false}}
+				});
+						</script>
+
+
+
+					</div>
+				</div>
+			</div>
+
 			<div class="col-lg-6 col-md-3">
 
 				<div class="panel panel-default">
@@ -184,7 +289,7 @@ $sum_today_expense=$result['todaysexpense'];
 			</div>
 
 
-			<div class="col-lg-6 col-md-3">
+			<!-- <div class="col-lg-6 col-md-3">
 
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll padding-left: 80px; padding-right: 80px;"">
@@ -223,7 +328,7 @@ $sum_today_expense=$result['todaysexpense'];
 
 					</div>
 				</div>
-			</div>
+			</div> -->
 
 
 			<div class="col-lg-6 col-md-3">
