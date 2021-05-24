@@ -13,3 +13,7 @@ MYSQL_DB = 'SEMDB'
 
 #SQLAlchemy CONFIGS
 SQLALCHEMY_DATABASE_URI = 'mysql://root:Root@123@localhost/SEMDB'
+
+#Celery config
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'

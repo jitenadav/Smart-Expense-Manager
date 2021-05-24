@@ -10,6 +10,8 @@ from sqlalchemy import text
 from flask_mysqldb import MySQL
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, output_file, show
+from concurrent.futures import ThreadPoolExecutor
+from . import arima
 
 server = Blueprint('server',__name__)
 source = ColumnDataSource()
@@ -36,8 +38,11 @@ def dashboard():
     for row in piresult:
         pie_lables.append(row[0])
         pie_data.append(int(row[2]))
+
+    #For 5 recent transcations
+    recent = expenses.query.filter_by(UserId=uid).join(ExpCategory, expenses.expCategory==ExpCategory.id).add_columns(expenses.id,expenses.expDesc, expenses.expDate, expenses.expAmount,ExpCategory.catName).order_by(expenses.expDate.desc()).limit(5)
     return render_template('dashboard.html',name = current_user.name, bar_labels = json.dumps(bar_labels), bar_data= json.dumps(bar_data),
-                            pie_lables = json.dumps(pie_lables), pie_data = json.dumps(pie_data))
+                            pie_lables = json.dumps(pie_lables), pie_data = json.dumps(pie_data), recent=recent)
 
 
 @server.route('/resetpassword', methods= ['POST','GET'])
