@@ -204,35 +204,36 @@ $name=$row['FullName'];
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
 
-						<h4>Recent Transactions2</h4>
-						<canvas id="myChart4"></canvas>
-						<script>
+						<h4>Recent Transactions</h4>
+						<div class="table-responsive" style="padding-left: 20px; padding-right: 20px;">
+          <table class="table table-bordered mg-b-0">
+            <thead>
+              <tr>
+                <th>S.NO</th>
+                <th>Expense Item</th>
+                <th>Category</th>
+                <th>Expense Date</th>
+                <th>Expense Cost</th>
 
-						var ctx = document.getElementById('myChart4').getContext('2d');
-						var plabel = {{ bar_labels|safe }}
-						var pdata = {{ bar_data|safe }}
-						var chart = new Chart(ctx, {
-						// The type of chart we want to create
-						type: 'bar',
-						theme: 'light2',
+              </tr>
+            </thead>
+						{% for row in recent %}
+            <tbody>
+              <tr>
 
-						// The data for our dataset
+                <td>{{ loop.index}}</td>
 
-						data: {
+								<td>{{row.expDesc}}</td>
+                <td>{{row.catName}}</td>
+                <td>{{row.expDate}}</td>
+                <td>{{row.expAmount}}</td>
+              </tr>
+{% endfor %}
 
-								labels: plabel,
-								datasets: [{
-										label: 'Click to hide',
-										backgroundColor :colorArray,
-										data: pdata
-								}]
-						},
+            </tbody>
+          </table>
 
-
-						// Configuration options go here
-						options: {legend : {display:false}}
-				});
-						</script>
+        </div>
 
 
 
@@ -289,46 +290,6 @@ $sum_today_expense=$result['todaysexpense'];
 			</div>
 
 
-			<!-- <div class="col-lg-6 col-md-3">
-
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll padding-left: 80px; padding-right: 80px;"">
-
-						<h4>Recent Transactions</h4>
-						<div class="table-responsive" style="padding-left: 20px; padding-right: 20px;">
-          <table class="table table-bordered mg-b-0">
-            <thead>
-              <tr>
-                <th>S.NO</th>
-                <th>Expense Item</th>
-                <th>Category</th>
-                <th>Expense Date</th>
-                <th>Expense Cost</th>
-
-              </tr>
-            </thead>
-						{% for row in recent %}
-            <tbody>
-              <tr>
-
-                <td>{{ loop.index}}</td>
-
-								<td>{{row.expDesc}}</td>
-                <td>{{row.catName}}</td>
-                <td>{{row.expDate}}</td>
-                <td>{{row.expAmount}}</td>
-              </tr>
-{% endfor %}
-
-            </tbody>
-          </table>
-
-        </div>
-
-
-					</div>
-				</div>
-			</div> -->
 
 
 			<div class="col-lg-6 col-md-3">

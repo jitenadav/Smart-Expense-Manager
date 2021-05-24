@@ -5,6 +5,7 @@ from statsmodels.tsa.arima.model import ARIMAResults
 from sklearn.metrics import mean_squared_error
 from math import sqrt
 import numpy
+import logging
 
 # create a differenced series
 def difference(dataset, interval=1):
@@ -36,6 +37,7 @@ def predict():
 	predictions.append(yhat)
 	history.append(y[0])
 	print('>Predicted=%.3f, Expected=%.3f' % (yhat, y[0]))
+	logging.warning(yhat)
 # rolling forecasts
 # for i in range(1, len(y)):
 # 	# difference data

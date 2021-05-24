@@ -16,6 +16,11 @@ from . import arima
 server = Blueprint('server',__name__)
 source = ColumnDataSource()
 
+@server.route('/predict')
+def predict():
+    arima.predict()
+    return("Done")
+
 @server.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
