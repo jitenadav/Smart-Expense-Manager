@@ -1,3 +1,5 @@
+import os
+
 TESTING = True
 DEBUG = True
 FLASK_ENV = 'development'
@@ -17,3 +19,8 @@ SQLALCHEMY_DATABASE_URI = 'mysql://root:Root@123@localhost/SEMDB'
 #Celery config
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# aws
+S3_BUCKET = os.environ.get("S3_BUCKET")
+S3_KEY = os.environ.get("S3_KEY")
+S3_SECRET = os.environ.get("S3_SECRET_ACCESS_KEY")

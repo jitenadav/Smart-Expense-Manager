@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, flash, redirect, session, url_for, Blueprint
+from flask import Flask, render_template, request, flash, redirect, session, url_for, Blueprint, Response
 from flask_login import login_required, current_user
 from flask_paginate import Pagination, get_page_parameter
 from .models import User, expenses, ExpCategory
@@ -14,7 +14,8 @@ from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, output_file, show
 from concurrent.futures import ThreadPoolExecutor
 from . import arima, arima_train
-
+# AWS
+from . import resources
 executor = ThreadPoolExecutor(2)
 
 server = Blueprint('server',__name__)
@@ -188,6 +189,58 @@ def manageexpense():
     page = request.args.get('page', 1, type=int)
     result = expenses.query.filter_by(UserId=uid).join(ExpCategory, expenses.expCategory==ExpCategory.id).add_columns(expenses.id,expenses.expDesc, expenses.expDate, expenses.expAmount,ExpCategory.catName).order_by(expenses.expDate.desc()).paginate(page=page, per_page=20)
     return render_template('manage-expense.html', result=result)
+
+@server.route('/receipts', methods=['GET', 'POST'])
+@login_required
+def receipts():
+    if request.method == 'POST':
+        bucket = request.form['bucket']
+        session['bucket'] = bucket
+        return redirect(url_for('server.files'))
+    else:
+        buckets = resources.get_buckets_list()
+    return render_template("receipts_home.html", buckets=buckets)
+
+@server.route('/files')
+@login_required
+def files():
+    my_bucket = resources.get_bucket()
+    summaries = my_bucket.objects.all()
+
+    return render_template('files.html', my_bucket=my_bucket, files=summaries)
+
+@server.route('/upload', methods=['POST'])
+def upload():
+    file = request.files['file']
+    my_bucket = resources.get_bucket()
+    my_bucket.Object(file.filename).put(Body=file)
+
+    flash('File Uploaded successfully')
+    return redirect(url_for('server.files'))
+
+@server.route('/delete', methods=['POST'])
+@login_required
+def delete():
+    key = request.form['key']
+    my_bucket = resources.get_bucket()
+    my_bucket.Object(key).delete()
+
+    flash('File Deleted successfully')
+    return redirect(url_for('server.files'))
+
+@server.route('/download', methods=['POST'])
+@login_required
+def download():
+    key = request.form['key']
+    my_bucket = resources.get_bucket()
+
+    file_obj = my_bucket.Object(key).get()
+    return Response(
+        file_obj['Body'].read(),
+        mimetype='text/plain',
+        headers={"Content-Disposition": "attachment;filename={}".format(key)}
+    )
+
 
 @server.route('/manage/delete/<id>')
 @login_required

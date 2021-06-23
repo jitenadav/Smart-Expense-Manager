@@ -1,11 +1,17 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_bootstrap import Bootstrap
 
+from . import filters
+from . import resources
 db = SQLAlchemy()
 
 def create_app():
     app = Flask(__name__)
+    Bootstrap(app)
+    app.jinja_env.filters['datetimeformat'] = filters.datetimeformat
+    app.jinja_env.filters['file_type'] = filters.file_type
     app.config.from_pyfile('config.py')
 
     db.init_app(app)
