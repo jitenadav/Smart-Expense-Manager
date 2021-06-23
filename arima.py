@@ -21,10 +21,10 @@ def inverse_difference(history, yhat, interval=1):
 
 # load and prepare datasets
 def predict():
-	dataset = read_csv('dataset.csv', header=None, index_col=0, parse_dates=True, squeeze=True)
+	dataset = read_csv('SmtExpMngr/models/train_data.csv', header=None, index_col=0, parse_dates=True, squeeze=True)
 	X = dataset.values.astype('float32')
 	history = [x for x in X]
-	months_in_year = 12
+	months_in_year = 1
 	validation = read_csv('validation.csv', header=None, index_col=0, parse_dates=True, squeeze=True)
 	y = validation.values.astype('float32')
 	# load model
@@ -36,8 +36,7 @@ def predict():
 	yhat = bias + inverse_difference(history, yhat, months_in_year)
 	predictions.append(yhat)
 	history.append(y[0])
-	print('>Predicted=%.3f, Expected=%.3f' % (yhat, y[0]))
-	logging.warning(yhat)
+	return yhat
 # rolling forecasts
 # for i in range(1, len(y)):
 # 	# difference data

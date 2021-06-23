@@ -3,6 +3,8 @@ from flask_login import login_required, current_user
 from flask_paginate import Pagination, get_page_parameter
 from .models import User, expenses, ExpCategory
 from . import db
+import csv
+import sys
 import logging
 import json
 import datetime
@@ -11,20 +13,41 @@ from flask_mysqldb import MySQL
 from bokeh.models import ColumnDataSource
 from bokeh.plotting import figure, output_file, show
 from concurrent.futures import ThreadPoolExecutor
-from . import arima
+from . import arima, arima_train
+
+executor = ThreadPoolExecutor(2)
 
 server = Blueprint('server',__name__)
 source = ColumnDataSource()
 
-@server.route('/predict')
-def predict():
-    arima.predict()
-    return("Done")
 
 @server.route('/dashboard',methods=['GET','POST'])
 @login_required
 def dashboard():
+    predicted_amount = executor.submit(arima.predict)
+    pred_temp = predicted_amount.result()
+    amount = str(int(pred_temp[0]))
     uid = current_user.id
+    today = datetime.date.today()
+    mm = today.strftime("%B")
+    #Overview
+    yy_mm = str(today.year) +"-"+ str(mm)
+    tmonth = db.engine.execute(text("select DATE_FORMAT(expDate, '%Y-%M') as Month,  SUM(expAmount) from expenses group by DATE_FORMAT(expDate, '%Y-%M') having Month= '{}' order by Month desc".format(yy_mm)))
+    tme= ""
+    for row in tmonth:
+        tme = row[1]
+    tcat = db.engine.execute(text("select DATE_FORMAT(expDate, '%Y-%M') as Month, expCategory,catName , SUM(expAmount) from expenses left join exp_category on expCategory=exp_category.id group by DATE_FORMAT(expDate, '%Y-%M'),expCategory having Month='{}' order by Month,SUM(expAmount) desc limit 1".format(yy_mm)))
+    cat=""
+    for row in tcat:
+        cat = row[2]
+    ptoday = today.replace(month = today.month - 1)
+    pmm = ptoday.strftime("%B")
+    pyy_mm = str(ptoday.year) +"-"+ str(pmm)
+    print(pyy_mm)
+    tmonth = db.engine.execute(text("select DATE_FORMAT(expDate, '%Y-%M') as Month,  SUM(expAmount) from expenses group by DATE_FORMAT(expDate, '%Y-%M') having Month= '{}' order by Month desc".format(pyy_mm)))
+    pme= ""
+    for row in tmonth:
+        pme = row[1]
     # Bar graph Year's Expense
     year = datetime.date.today().year
     months = {'January':0,'February':0,'March':0,'April':0,'May':0,'June':0,'July':0,'August':0,'September':0,'October':0,'November':0,'December':0}
@@ -47,7 +70,7 @@ def dashboard():
     #For 5 recent transcations
     recent = expenses.query.filter_by(UserId=uid).join(ExpCategory, expenses.expCategory==ExpCategory.id).add_columns(expenses.id,expenses.expDesc, expenses.expDate, expenses.expAmount,ExpCategory.catName).order_by(expenses.expDate.desc()).limit(5)
     return render_template('dashboard.html',name = current_user.name, bar_labels = json.dumps(bar_labels), bar_data= json.dumps(bar_data),
-                            pie_lables = json.dumps(pie_lables), pie_data = json.dumps(pie_data), recent=recent)
+                            pie_lables = json.dumps(pie_lables), pie_data = json.dumps(pie_data), recent=recent, this_month=tme, prev_month=pme, predictions = amount,expensivecategory=cat)
 
 
 @server.route('/resetpassword', methods= ['POST','GET'])
@@ -72,10 +95,12 @@ def add_expense():
         db.session.add(new_expense)
         db.session.commit()
         flash('Transaction Added Successfully')
+        curr = db.engine.execute(text("select DATE_FORMAT(expDate, '%Y-%m-%01') , SUM(expAmount) from expenses where UserId = '{}' group by DATE_FORMAT(expDate, '%Y-%m-%01')".format(userId)))
+        executor.submit(arima_tocsv(curr))
+        executor.submit(arima_train.train())
         return redirect(url_for('server.add_expense'))
 
     get_category = ExpCategory.query.filter_by()
-    print(type(get_category))
     return render_template('add-expense.html',catlist = get_category)
 
 @server.route('/profile', methods=['GET','POST'])
@@ -174,7 +199,9 @@ def delete_record(id=None):
         flash("Record Deleted")
         return redirect(url_for('server.manageexpense'))
 
-
-
+def arima_tocsv(cursor):
+    c = csv.writer(open('SmtExpMngr/models/train_data.csv', 'w'))
+    for x in cursor:
+        c.writerow(x)
 if __name__ == '__main__':
     app.run(debug=True)

@@ -142,7 +142,7 @@ $name=$row['FullName'];
 				<div class="panel panel-default">
 					<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
 
-						<h4>Recent Transactions</h4>
+						<h4>Overview</h4>
 						<hr>
 
 						<div class="col-lg-6 col-md-2">
@@ -150,8 +150,8 @@ $name=$row['FullName'];
 							<div class="panel panel-default">
 								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
 
-									<h4>TOTAL1</h4>
-									<b><h2><div id="count1"><span class="count">200</span></div></h2></b>
+									<h4>This Month</h4>
+									<b><h2><div id="count1"><span class="count">{{ this_month }}</span></div></h2></b>
 
 									<br>
 								</div>
@@ -163,8 +163,8 @@ $name=$row['FullName'];
 
 							<div class="panel panel-default">
 								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
-									<h4>TOTAL</h4>
-									<b><h2><div id="count2"><span class="count">200</span></div></h2></b>
+									<h4>Next Month Predicted</h4>
+									<b><h2><div id="count2"><span class="count">{{ predictions}}</span></div></h2></b>
 									<br>
 								</div>
 							</div>
@@ -175,8 +175,8 @@ $name=$row['FullName'];
 							<div class="panel panel-default">
 								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
 
-									<h4>TOTAL2</h4>
-									<b><h2><div id="count3"><span class="count">00</span></div></h2></b>
+									<h4>Previous Month</h4>
+									<b><h2><div id="count3"><span class="count">{{prev_month}}</span></div></h2></b>
 								</div>
 							</div>
 
@@ -187,8 +187,8 @@ $name=$row['FullName'];
 							<div class="panel panel-default">
 								<div class="panel-body easypiechart-panel style="min-height: 800px; max-height: 600px;overflow-y: scroll;"">
 
-									<h4>PREDICTED2</h4>
-										<b><h2><div id="count4"><span class="count">200</span></div></h2></b>
+									<h4>Most Spend Category</h4>
+										<b><h2><div id="count4"><span class="count">{{ expensivecategory }}</span></div></h2></b>
 								</div>
 							</div>
 						</div>
