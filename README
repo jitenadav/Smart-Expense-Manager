@@ -1,7 +1,0 @@
-1.Install Python 3.6.9
-2.Install Python-pip
-3.run pip install -r requirements.txt
-4.export FLASK_APP=SmtExpMngr
-5.export FLASK_ENV=development
-6.Move 1 directory back. (cd ..)
-7.flask run
